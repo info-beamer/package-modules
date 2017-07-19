@@ -1,0 +1,47 @@
+{
+    "name": "Default Scroller/Sidebar",
+    "options": [{
+        "title": "Scroller",
+        "type": "section"
+    }, {
+        "title": "Font",
+        "ui_width": 3,
+        "name": "font",
+        "type": "font",
+        "doc_link": true,
+        "default": "default-font.ttf"
+    }, {
+        "title": "Scroller Title",
+        "ui_width": 3,
+        "name": "title",
+        "type": "string",
+        "default": ""
+    }, {
+        "title": "Title Foreground",
+        "ui_width": 3,
+        "name": "foreground",
+        "type": "color",
+        "default": [1, 1, 1, 1]
+    }, {
+        "title": "Title Background",
+        "ui_width": 3,
+        "name": "background",
+        "type": "color",
+        "default": [0, 0, 0, 1]
+    }, {
+        "title": "Scroller items",
+        "name": "items",
+        "type": "list",
+        "itemname": "Item",
+        "items": [{
+            "title": "Text",
+            "ui_width": 12,
+            "name": "text",
+            "type": "string",
+            "default": ""
+        }],
+        "default": [
+            {"text": "example"}
+        ]
+    }]
+}

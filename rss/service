@@ -1,0 +1,134 @@
+#!/usr/bin/python
+import time
+import pytz
+import sys
+import os
+import traceback
+import json
+import hashlib
+import calendar
+import htmlentitydefs
+from datetime import datetime
+from urlparse import urlparse, urlunparse
+from cStringIO import StringIO
+from HTMLParser import HTMLParser
+
+import requests
+import feedparser
+from PIL import Image
+
+from hosted import CONFIG
+
+CONFIG.restart_on_update()
+
+class HTMLTextExtractor(HTMLParser):
+    def __init__(self):
+        HTMLParser.__init__(self)
+        self.result = [ ]
+
+    def handle_data(self, d):
+        self.result.append(d)
+
+    def handle_charref(self, number):
+        codepoint = int(number[1:], 16) if number[0] in (u'x', u'X') else int(number)
+        self.result.append(unichr(codepoint))
+
+    def handle_entityref(self, name):
+        try:
+            codepoint = htmlentitydefs.name2codepoint[name]
+            self.result.append(unichr(codepoint))
+        except:
+            pass
+
+    def get_text(self):
+        return u''.join(self.result)
+
+def html_to_text(html):
+    s = HTMLTextExtractor()
+    s.feed(html)
+    return s.get_text()
+
+def convert_unix_time(unix):
+    utc_dt = datetime.utcfromtimestamp(unix).replace(tzinfo=pytz.utc)
+
+    tz = pytz.timezone('Europe/Berlin')
+    dt = utc_dt.astimezone(tz)
+    day = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag']
+    return day[dt.weekday()] + ', ' + dt.strftime("%d.%m.%y %H:%M")
+
+def local_image(url, max_size=(256, 256)):
+    cache_name = "cached-image-%s.png" % hashlib.md5(url).hexdigest()
+    if not os.path.exists(cache_name):
+        try:
+            r = requests.get(url)
+            im = Image.open(StringIO(r.content))
+            im.thumbnail((256, 256), Image.ANTIALIAS)
+            im.save(cache_name)
+        except Exception:
+            traceback.print_exc()
+    return cache_name if os.path.exists(cache_name) else None
+
+def get_image(feed):
+    if 'image' in feed:
+        href = feed['image']['href']
+        return local_image(href) or 'package.png'
+
+def truncate(str, max_len):
+    return (str[:max_len] + '..') if len(str) > max_len else str
+
+def get_entries(entries):
+    rss_entries = []
+
+    for entry in entries:
+        rss_entry = {
+            'title': truncate(html_to_text(entry['title']), 160),
+            'summary': truncate(html_to_text(entry.get('summary', '')), 400),
+        }
+
+        published = calendar.timegm(entry['published_parsed'])
+        rss_entry['unix'] = published
+        rss_entry['human'] = convert_unix_time(published)
+
+        for link in entry['links']:
+            if link['rel'] == 'enclosure' and link.get('type') in ('image/jpeg', 'image/png', 'image/gif', None):
+                img = local_image(link['href'], (1920/2, 1080/2))
+                if img:
+                    rss_entry['image'] = img
+                    break
+
+        rss_entries.append(rss_entry)
+    return rss_entries
+
+def update_feed(url):
+    parsed = feedparser.parse(url)
+    rss = {
+        "title": parsed['feed']['title'],
+        "entries": get_entries(parsed['entries']),
+    }
+
+    icon = get_image(parsed['feed'])
+    if not icon:
+        scheme, netloc, path, params, query, _ = urlparse(url)
+        favicon_url = urlunparse((scheme, netloc, '/favicon.ico', '', '', ''))
+        icon = local_image(favicon_url)
+    if icon:
+        rss['icon'] = icon
+
+    with file("feed.json", "wb") as out:
+        out.write(json.dumps(rss, ensure_ascii=False).encode('utf8'))
+
+if __name__ == '__main__':
+    feed_url = CONFIG['url']
+    if feed_url == "":
+        print >>sys.stderr, "waiting for a config change"
+        while 1: time.sleep(100000)
+
+    while 1:
+        try:
+            update_feed(feed_url)
+        except:
+            traceback.print_exc()
+            time.sleep(60)
+
+        time.sleep(CONFIG['interval'])
+

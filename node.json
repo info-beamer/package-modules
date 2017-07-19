@@ -1,0 +1,93 @@
+{
+    "name": "Play List",
+    "options": [{
+        "title": "Configuration",
+        "type": "section"
+    }, {
+        "title": "Scroller",
+        "ui_width": 4,
+        "name": "scroller",
+        "type": "resource",
+        "valid": ["child"],
+        "default": "default"
+    }, {
+        "title": "Sidebar",
+        "ui_width": 4,
+        "name": "sidebar",
+        "type": "resource",
+        "valid": ["child"],
+        "default": "default"
+    }, {
+        "title": "Background",
+        "ui_width": 4,
+        "name": "background",
+        "type": "resource",
+        "valid": ["image", "video"],
+        "default": "empty.png"
+    }, {
+        "title": "Show scroller",
+        "ui_width": 4,
+        "name": "show_scroller",
+        "type": "select",
+        "options": [
+            ["always", "Always"],
+            ["child", "Let content decide (default)"],
+            ["never", "Never"]
+        ],
+        "default": "child"
+    }, {
+        "title": "Show sidebar",
+        "ui_width": 4,
+        "name": "show_sidebar",
+        "type": "select",
+        "options": [
+            ["always", "Always"],
+            ["child", "Let content decide (default)"],
+            ["never", "Never"]
+        ],
+        "default": "child"
+    },    
+
+    {
+        "title": "Module Playlist",
+        "type": "section"
+    }, {
+        "title": "Playlist",
+        "name": "playlist",
+        "type": "list",
+        "itemname": "Item",
+        "items": [{
+            "title": "Module",
+            "ui_width": 4,
+            "name": "module",
+            "type": "resource",
+            "valid": ["child"],
+            "default": "idle"
+        }, {
+            "title": "Items to show",
+            "ui_width": 3,
+            "name": "num_items",
+            "type": "select",
+            "options": [
+                [0, "0 (disabled)"],
+                [1, "1 item"],
+                [2, "2 items"],
+                [3, "3 items"],
+                [4, "4 items"],
+                [5, "5 items"],
+                [6, "6 items"]
+            ],
+            "default": 1
+        }],
+        "default": [
+            {
+                "module": "twitter",
+                "num_items": 1
+            },
+            {
+                "module": "media",
+                "num_items": 1
+            }
+        ]
+    }]
+}

@@ -1,0 +1,53 @@
+{
+    "name": "RSS module",
+    "permissions": {
+        "network": "Needs internet access to fetch RSS feeds"
+    },
+    "options": [{
+        "title": "Generic",
+        "type": "section"
+    }, {
+        "title": "RSS Feed Url",
+        "ui_width": 9,
+        "name": "url",
+        "type": "string",
+        "default": ""
+    }, {
+        "title": "Poll Interval",
+        "ui_width": 3,
+        "name": "interval",
+        "type": "select",
+        "doc_link": true,
+        "options": [
+            [120, "2 Minutes"],
+            [300, "5 Minutes"],
+            [600, "10 Minutes (default)"],
+            [900, "15 Minutes"]
+        ],
+        "default": 600
+    },
+
+    {
+        "title": "Presentation",
+        "type": "section"
+    }, {
+        "title": "Background",
+        "ui_width": 3,
+        "name": "background",
+        "type": "resource",
+        "valid": ["image", "video"],
+        "default": "black.png"
+    },  {
+        "title": "Title Color",
+        "ui_width": 3,
+        "name": "title_color",
+        "type": "color",
+        "default": [1,1,1,1]
+    }, {
+        "title": "Show feed in ticker",
+        "ui_width": 4,
+        "name": "ticker",
+        "type": "boolean",
+        "default": false
+    }]
+}

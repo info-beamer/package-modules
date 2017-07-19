@@ -1,0 +1,86 @@
+{
+    "name": "Video/Image Playlist",
+    "options": [{
+        "title": "Configuration",
+        "type": "section"
+    }, {
+        "title": "Switch time",
+        "ui_width": 3,
+        "name": "switch_time",
+        "type": "select",
+        "doc_link": true,
+        "options": [
+            [0, "Instantly"],
+            [0.2, "Short"],
+            [0.4, "Medium (default)"],
+            [0.8, "Long"]
+        ],
+        "default": 0.0
+    }, {
+        "title": "Ken Burns effect",
+        "ui_width": 3,
+        "name": "kenburns",
+        "type": "boolean",
+        "hint": "Slowly pan and zoom displayed images",
+        "doc_link": true,
+        "default": false
+    }, {
+        "title": "Audio",
+        "ui_width": 4,
+        "name": "audio",
+        "type": "boolean",
+        "hint": "Play audio for all videos",
+        "doc_link": true,
+        "default": false
+    }, {
+        "title": "Video Background",
+        "ui_width": 3,
+        "name": "video_background",
+        "type": "resource",
+        "valid": ["image"],
+        "default": "black.png"
+    }, {
+        "title": "Image Background",
+        "ui_width": 3,
+        "name": "image_background",
+        "type": "resource",
+        "valid": ["image", "video"],
+        "default": "black.png"
+    }, 
+
+    {
+        "title": "Playlist",
+        "name": "playlist",
+        "type": "list",
+        "itemname": "Item",
+        "items": [{
+            "title": "Asset",
+            "ui_width": 6,
+            "name": "file",
+            "type": "resource",
+            "valid": ["image", "video"],
+            "default": "empty.png"
+        }, {
+            "title": "Play time",
+            "ui_width": 3,
+            "name": "duration",
+            "type": "duration",
+            "default": 5
+        }, {
+            "title": "Fullscreen",
+            "ui_width": 3,
+            "name": "fullscreen",
+            "type": "boolean",
+            "hint": "Play content in exclusive fullscreen mode",
+            "doc_link": true,
+            "default": false
+        }],
+        "default": [
+            {
+                "file": "example.jpg",
+                "duration": 10,
+                "fullscreen": false
+            }
+        ]
+    }]
+}
