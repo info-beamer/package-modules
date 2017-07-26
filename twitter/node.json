@@ -19,7 +19,7 @@
             ["favs", "Show user likes"],
             ["search", "Search tweets"]
         ],
-        "default": "search"
+        "default": "timeline"
     }, {
         "title": "Query/Username",
         "ui_width": 3,

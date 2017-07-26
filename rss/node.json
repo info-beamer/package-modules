@@ -11,7 +11,7 @@
         "ui_width": 9,
         "name": "url",
         "type": "string",
-        "default": ""
+        "default": "https://info-beamer.com/blog.rss"
     }, {
         "title": "Poll Interval",
         "ui_width": 3,
