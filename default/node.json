@@ -29,6 +29,21 @@
         "type": "color",
         "default": [0, 0, 0, 1]
     }, {
+        "title": "Speed",
+        "ui_width": 3,
+        "name": "speed",
+        "type": "select",
+        "options": [
+            [50, "Really slow"],
+            [80, "Slow"],
+            [100, "Default"],
+            [130, "Slighly faster"],
+            [160, "Fast"],
+            [200, "Quite fast"],
+            [300, "Lightspeed"]
+        ],
+        "default": 100
+    }, {
         "title": "Scroller items",
         "name": "items",
         "type": "list",

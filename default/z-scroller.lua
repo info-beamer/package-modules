@@ -9,8 +9,8 @@ local black = resource.create_colored_texture(0,0,0,1)
 local background = resource.create_colored_texture(0,0,0,1)
 local foreground = {r=1,g=1,b=1,a=1}
 local title = ""
+local speed = 100
 
-local SPEED = 100
 local HEIGHT = 50
 local FONT_HEIGHT = HEIGHT - 6
 
@@ -27,7 +27,7 @@ local function Scroller(feed)
         local now = sys.now()
         local delta = now - last
         last = now
-        local advance = delta * SPEED
+        local advance = delta * speed
 
         local idx = 1
         local x = current_left
@@ -113,6 +113,7 @@ function M.content_update(name)
             config.background.r, config.background.g, config.background.b, config.background.a
         )
         foreground = config.foreground
+        speed = config.speed
         local scroller = {}
         for idx = 1, #config.items do
             local item = config.items[idx]
